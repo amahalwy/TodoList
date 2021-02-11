@@ -12,7 +12,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Box w="70%" m="6% auto">
+    <Box w="60%" m="6% auto">
       <Box display="flex" justifyContent="space-between" m="1% 0">
         <Heading>To Do list - *date* </Heading>
         <Button onClick={onOpen}>Create a task</Button>

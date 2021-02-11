@@ -15,10 +15,13 @@ import {
 } from "@chakra-ui/react";
 import ListTotals from "./ListTotals";
 import TodoItem from "./TodoItem";
+import { parse } from "path";
 
 export default function List({ todos }) {
   const totalDuration = () => {
-    const durations = todos.map((todo) => Number(todo.duration));
+    if (todos.length === 0) return null;
+    const durations = todos.map((todo) => parseFloat(todo.duration));
+
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
     return durations.reduce(reducer);
   };
@@ -27,7 +30,6 @@ export default function List({ todos }) {
     <Box>
       <Box bg="#ccc" border="1px solid black" h="500px">
         <Table>
-          <TableCaption>Imperial to metric conversion factors</TableCaption>
           <Thead>
             <Tr>
               <Th w="40%">Description</Th>
@@ -48,16 +50,6 @@ export default function List({ todos }) {
             </Tr>
           </Tfoot>
         </Table>
-        {/* <UnorderedList listStyleType="none">
-          <Box display="flex">
-            <Box>Description</Box>
-            <Box>Duration</Box>
-            <Box></Box>
-            <Box></Box>
-          </Box>
-          
-        </UnorderedList> */}
-        <ListTotals todos={todos} />
       </Box>
     </Box>
   );
