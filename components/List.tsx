@@ -8,7 +8,7 @@ export default function List({ todos }) {
     const durations = todos.map((todo) => parseFloat(todo.duration));
 
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    return durations.reduce(reducer);
+    return durations.reduce(reducer).toFixed(2);
   };
 
   return (
@@ -31,7 +31,7 @@ export default function List({ todos }) {
           <Tfoot>
             <Tr>
               <Th>Total Tasks: {todos.length}</Th>
-              <Th>Total Duration: {totalDuration().toFixed(2)}</Th>
+              <Th>Total Duration: {totalDuration()}</Th>
             </Tr>
           </Tfoot>
         </Table>
