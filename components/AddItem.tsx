@@ -22,7 +22,10 @@ import { Form, Field } from "react-final-form";
 const AddItem = ({ onClose, isOpen, setTodos, todos }) => {
   const onSubmit = (values) => {
     values.status = "Not Started";
-    setTodos(todos.concat(values));
+    values.active = false;
+    const newTodos = todos.concat(values);
+    setTodos(newTodos);
+    // localStorage.setItem("todos", JSON.stringify(newTodos));
     onClose();
   };
 

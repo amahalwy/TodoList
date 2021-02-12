@@ -13,7 +13,6 @@ import {
   Td,
   TableCaption,
 } from "@chakra-ui/react";
-import ListTotals from "./ListTotals";
 import TodoItem from "./TodoItem";
 import { parse } from "path";
 
@@ -28,7 +27,7 @@ export default function List({ todos }) {
 
   return (
     <Box>
-      <Box bg="#ccc" border="1px solid black" h="500px">
+      <Box shadow="base" h="500px">
         <Table>
           <Thead>
             <Tr>
