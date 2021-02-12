@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  Heading,
   Flex,
   Button,
   Modal,
@@ -15,7 +14,6 @@ import {
   FormControl,
   Input,
   InputGroup,
-  InputRightElement,
 } from "@chakra-ui/react";
 import { Form, Field } from "react-final-form";
 
@@ -25,7 +23,7 @@ const AddItem = ({ onClose, isOpen, setTodos, todos }) => {
     values.active = false;
     const newTodos = todos.concat(values);
     setTodos(newTodos);
-    // localStorage.setItem("todos", JSON.stringify(newTodos));
+    localStorage.setItem("todos", JSON.stringify(newTodos));
     onClose();
   };
 

@@ -1,29 +1,16 @@
 import React from "react";
-import { Box, Button, Tr, Td, Text } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import { useState, useEffect } from "react";
+import { Button, Tr, Td, Text } from "@chakra-ui/react";
 
 const Timer = ({ todo, setStatus, isActive, setIsActive }) => {
-  const [seconds, setSeconds] = useState<number | any>(
+  const [seconds, setSeconds] = React.useState<number | any>(
     todo.duration * 60000 - 1000
   );
 
-  const getStatus = () => {
-    switch (seconds) {
-      case seconds === todo.duration * 60000 - 1000:
-        return "Not Started";
-      case seconds < todo.duration * 60000 - 1000 && seconds > 0:
-        return "In Progress";
-      case seconds <= 0:
-        return "Completed";
-    }
-  };
   const toggle = () => {
     setIsActive(!isActive);
-    setStatus(getStatus());
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     let interval = null;
     if (isActive && seconds > 0) {
       interval = setInterval(() => {
@@ -34,6 +21,19 @@ const Timer = ({ todo, setStatus, isActive, setIsActive }) => {
     }
     return () => clearInterval(interval);
   }, [isActive, seconds]);
+
+  React.useEffect(() => {
+    if (seconds >= todo.duration * 60000 - 1000) {
+      setStatus("Not Started");
+      return;
+    } else if (seconds < todo.duration * 60000 - 1000 && seconds > 0) {
+      setStatus("In Progress");
+      return;
+    } else if (seconds <= 0) {
+      setStatus("Completed");
+      return;
+    }
+  }, [seconds]);
 
   const timeConvert = (num) => {
     if (num <= 0) return "Time Up!";
@@ -57,6 +57,7 @@ const Timer = ({ todo, setStatus, isActive, setIsActive }) => {
   );
 };
 
+// Maybe iterate and create <Td>s like this instead for 69-71
 const __TODO_VALUES = ["description", "duration", "status"];
 
 const TodoItem = ({ todo }) => {
@@ -65,11 +66,9 @@ const TodoItem = ({ todo }) => {
 
   return (
     <Tr>
-      {/* {__TODO_VALUES.map((value, i) => { */}
-      {/* })} */}
       <Td>{todo.description}</Td>
       <Td>{todo.duration}</Td>
-      <Td>{todo.status}</Td>
+      <Td>{status}</Td>
       <Timer
         todo={todo}
         isActive={isActive}

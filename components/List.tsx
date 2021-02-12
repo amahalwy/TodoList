@@ -1,20 +1,6 @@
 import React from "react";
-import {
-  Box,
-  ListIcon,
-  OrderedList,
-  UnorderedList,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tfoot, Tr, Th } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
-import { parse } from "path";
 
 export default function List({ todos }) {
   const totalDuration = () => {
@@ -26,8 +12,8 @@ export default function List({ todos }) {
   };
 
   return (
-    <Box>
-      <Box shadow="base" h="500px">
+    <Box bg="white">
+      <Box shadow="xl" maxH="800px" overflowY="scroll">
         <Table>
           <Thead>
             <Tr>
@@ -45,7 +31,7 @@ export default function List({ todos }) {
           <Tfoot>
             <Tr>
               <Th>Total Tasks: {todos.length}</Th>
-              <Th>Total Duration: {totalDuration()}</Th>
+              <Th>Total Duration: {totalDuration().toFixed(2)}</Th>
             </Tr>
           </Tfoot>
         </Table>
