@@ -1,5 +1,7 @@
 import React from "react";
-import { Button, Tr, Td, Text } from "@chakra-ui/react";
+import { Box, Button, Tr, Td, Text } from "@chakra-ui/react";
+import { GiPauseButton } from "react-icons/gi";
+import { BsPlayFill } from "react-icons/bs";
 
 const timeConvert = (num) => {
   if (num <= 0) return "Time Up!";
@@ -35,7 +37,7 @@ const Timer = ({
 
   React.useEffect(() => {
     todo.timeLeft = timeLeft;
-    getStatus();
+    getAndSetStatus();
     localStorage.setItem("todos", JSON.stringify(todos));
 
     let interval = null;
@@ -45,7 +47,7 @@ const Timer = ({
       }, 1000);
     } else if (isActive && timeLeft <= 0) {
       setIsActive(false);
-      getStatus();
+      getAndSetStatus();
       console.log("else");
       todo.active = false;
     }
@@ -53,13 +55,23 @@ const Timer = ({
     return () => clearInterval(interval);
   }, [isActive, timeLeft]);
 
-  const toggle = () => {
+  const toggleActive = () => {
     setIsActive(!isActive);
     todos[todo.id].active = true;
     localStorage.setItem("todos", JSON.stringify(todos));
   };
 
-  const getStatus = () => {
+  const pause = () => {
+    setIsActive(!isActive);
+    if (todos[todo.id].active) {
+      todos[todo.id].active = false;
+    } else {
+      todos[todo.id].active = true;
+    }
+    localStorage.setItem("todos", JSON.stringify(todos));
+  };
+
+  const getAndSetStatus = () => {
     if (timeLeft >= initialDuration) {
       setStatus("Not Started");
       todo.status = "Not Started";
@@ -75,15 +87,43 @@ const Timer = ({
     }
   };
 
-  return (
-    <Td>
-      {!isActive && status === "Not Started" ? (
-        <Button onClick={toggle}>Start?</Button>
-      ) : (
-        <Text>{timeConvert(timeLeft)}</Text>
-      )}
-    </Td>
-  );
+  const returnStatus = () => {
+    // Not active and not started => new todo
+    if (!isActive && status === "Not Started") {
+      return <Button onClick={toggleActive}>Start?</Button>;
+    } else if (
+      // Active and not started => JUST clicked start; want to show the beginning timeleft
+      // Not active and completed => show time up
+      (isActive && status === "Not Started") ||
+      (!isActive && status === "Completed")
+    ) {
+      return <Text>{timeConvert(timeLeft)}</Text>;
+    } else {
+      // Active and in progess => counting down; should show a pause button
+      if (isActive && status === "In Progress...") {
+        return (
+          <Box display="flex" alignItems="center" justifyContent="space-around">
+            <Text>{timeConvert(timeLeft)}</Text>
+            <Button onClick={pause} size="sm">
+              <GiPauseButton />
+            </Button>
+          </Box>
+        );
+      } else if (!isActive && status === "In Progress...") {
+        // Not active but in progress => a paused todo
+        return (
+          <Box display="flex" alignItems="center" justifyContent="space-around">
+            <Text>{timeConvert(timeLeft)}</Text>
+            <Button onClick={pause} size="sm">
+              <BsPlayFill />
+            </Button>
+          </Box>
+        );
+      }
+    }
+  };
+
+  return <Td>{returnStatus()}</Td>;
 };
 
 const TodoItem = ({ todo, todos, id }) => {
