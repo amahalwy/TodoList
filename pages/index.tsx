@@ -12,7 +12,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Box bg="#eee" h="100vh">
+    <Box bg="#fff" h="100vh">
       <Box w="60%" p="4% 0" m="0 auto">
         <Box display="flex" justifyContent="space-between">
           <Heading>To Do list - *date* </Heading>
