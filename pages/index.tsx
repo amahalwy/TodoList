@@ -12,19 +12,21 @@ const Home = () => {
   }, []);
 
   return (
-    <Box w="60%" m="6% auto">
-      <Box display="flex" justifyContent="space-between" m="1% 0">
-        <Heading>To Do list - *date* </Heading>
-        <Button onClick={onOpen}>Create a task</Button>
-        <AddItem
-          todos={todos}
-          setTodos={setTodos}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
-      </Box>
+    <Box bg="#eee" h="100vh">
+      <Box w="60%" p="4% 0" m="0 auto">
+        <Box display="flex" justifyContent="space-between">
+          <Heading>To Do list - *date* </Heading>
+          <Button onClick={onOpen}>Create a task</Button>
+          <AddItem
+            todos={todos}
+            setTodos={setTodos}
+            isOpen={isOpen}
+            onClose={onClose}
+          />
+        </Box>
 
-      <List todos={todos} />
+        <List todos={todos} />
+      </Box>
     </Box>
   );
 };

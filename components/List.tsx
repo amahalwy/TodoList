@@ -1,21 +1,6 @@
 import React from "react";
-import {
-  Box,
-  ListIcon,
-  OrderedList,
-  UnorderedList,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from "@chakra-ui/react";
-import ListTotals from "./ListTotals";
+import { Box, Table, Thead, Tbody, Tfoot, Tr, Th } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
-import { parse } from "path";
 
 export default function List({ todos }) {
   const totalDuration = () => {
@@ -23,12 +8,12 @@ export default function List({ todos }) {
     const durations = todos.map((todo) => parseFloat(todo.duration));
 
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    return durations.reduce(reducer);
+    return durations.reduce(reducer).toFixed(2);
   };
 
   return (
-    <Box>
-      <Box bg="#ccc" border="1px solid black" h="500px">
+    <Box bg="white">
+      <Box shadow="xl" maxH="800px" overflowY="scroll">
         <Table>
           <Thead>
             <Tr>
