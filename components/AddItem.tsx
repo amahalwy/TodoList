@@ -111,11 +111,6 @@ const AddItem = ({ onClose, isOpen, setTodos, todos }) => {
                     </Button>
                   </Flex>
                 </ModalFooter>
-                {/* {modalSubmit && values.owner ? (
-                  <ShowStatus data={modalSubmit} />
-                ) : (
-                  ""
-                )} */}
               </ModalContent>
             </form>
           )}

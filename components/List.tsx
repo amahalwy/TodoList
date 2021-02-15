@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Table, Thead, Tbody, Tfoot, Tr, Th } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tfoot, Tr, Th, Td } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
+import AddTodo from "./AddTodo";
 
 export default function List({ todos }) {
   const [activeTodo, setActiveTodo] = React.useState(null);
@@ -22,8 +23,8 @@ export default function List({ todos }) {
         border="1px solid #eaeaea"
         borderRadius="10px"
       >
-        <Table m="1%" w="98%" size="md">
-          <Thead>
+        <Table m="1%" w="98%" size="md" variant="unstyled">
+          <Thead borderBottom="1px solid rgb(219, 226, 236)">
             <Tr>
               <Th w="40%" fontSize={16}>
                 Description
@@ -48,7 +49,13 @@ export default function List({ todos }) {
                 />
               );
             })}
+            <Tr>
+              <Td colSpan={4}>
+                <AddTodo />
+              </Td>
+            </Tr>
           </Tbody>
+
           <Tfoot>
             <Tr>
               <Th>Total Tasks: {todos.length}</Th>

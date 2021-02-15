@@ -173,7 +173,7 @@ const TodoItem = ({ todo, todos, id, setActiveTodo, activeTodo }) => {
   };
 
   return (
-    <Tr>
+    <Tr borderBottom="1px solid rgb(219, 226, 236)" h="16">
       <Td>{todo.description}</Td>
       <Td>{todo.duration}</Td>
       <Td color={statusColor()}>{status}</Td>
