@@ -182,10 +182,9 @@ const TodoItem = ({ todo, todos, id, setActiveTodo, activeTodo }) => {
         todo={todo}
         todos={todos}
         status={status}
+        setStatus={setStatus}
         activeTodo={activeTodo}
         setActiveTodo={setActiveTodo}
-        status={status}
-        setStatus={setStatus}
       />
     </Tr>
   );
