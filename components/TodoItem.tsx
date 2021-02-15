@@ -18,14 +18,24 @@ const timeConvert = (num) => {
   return `${newHours}:${newMinutes}`;
 };
 
+// interface TimerProps {
+//   id: number;
+//   todos: object[];
+//   todo: any;
+//   status: string;
+//   setStatus: () => void;
+//   isActive: undefined | number;
+//   setIsActive: () => void;
+// }
+
 const Timer = ({
   id,
   todo,
   todos,
   status,
   setStatus,
-  isActive,
-  setIsActive,
+  activeTodo,
+  setActiveTodo,
 }) => {
   const [initialDuration, setInitialDuration] = React.useState<number | any>(
     todo.duration * 60000
@@ -41,28 +51,26 @@ const Timer = ({
     localStorage.setItem("todos", JSON.stringify(todos));
 
     let interval = null;
-    if (isActive && timeLeft > 0) {
+    // console.log(activeTodo, todo.id, timeLeft);
+    if (activeTodo === todo.id && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft((timeLeft) => timeLeft - 1000);
       }, 1000);
-    } else if (isActive && timeLeft <= 0) {
-      setIsActive(false);
+    } else if (activeTodo == todo.id && timeLeft <= 0) {
+      setActiveTodo(null);
       getAndSetStatus();
-      console.log("else");
       todo.active = false;
     }
 
     return () => clearInterval(interval);
-  }, [isActive, timeLeft]);
+  }, [activeTodo, timeLeft]);
 
   const toggleActive = () => {
-    setIsActive(!isActive);
-    todos[todo.id].active = true;
-    localStorage.setItem("todos", JSON.stringify(todos));
-  };
-
-  const pause = () => {
-    setIsActive(!isActive);
+    if (activeTodo === null) {
+      setActiveTodo(todo.id);
+    } else {
+      setActiveTodo(null);
+    }
     if (todos[todo.id].active) {
       todos[todo.id].active = false;
     } else {
@@ -71,7 +79,14 @@ const Timer = ({
     localStorage.setItem("todos", JSON.stringify(todos));
   };
 
+  const start = () => {
+    setActiveTodo(todo.id);
+    todos[todo.id].active = true;
+    localStorage.setItem("todos", JSON.stringify(todos));
+  };
+
   const getAndSetStatus = () => {
+    console.log(timeLeft, initialDuration);
     if (timeLeft >= initialDuration) {
       setStatus("Not Started");
       todo.status = "Not Started";
@@ -80,7 +95,7 @@ const Timer = ({
       setStatus("In Progress...");
       todo.status = "In Progress...";
       return;
-    } else if (timeLeft === 0 && !isActive) {
+    } else if (timeLeft === 0) {
       setStatus("Completed");
       todo.status = "Completed";
       return;
@@ -89,32 +104,44 @@ const Timer = ({
 
   const returnStatus = () => {
     // Not active and not started => new todo
-    if (!isActive && status === "Not Started") {
-      return <Button onClick={toggleActive}>Start?</Button>;
+
+    if (
+      (!activeTodo || (activeTodo && activeTodo !== todo.id)) &&
+      status === "Not Started"
+    ) {
+      return (
+        <Button onClick={start} disabled={activeTodo && activeTodo !== todo.id}>
+          Start?
+        </Button>
+      );
     } else if (
       // Active and not started => JUST clicked start; want to show the beginning timeleft
       // Not active and completed => show time up
-      (isActive && status === "Not Started") ||
-      (!isActive && status === "Completed")
+      (activeTodo === todo.id && status === "Not Started") ||
+      (activeTodo !== todo.id && status === "Completed")
     ) {
       return <Text>{timeConvert(timeLeft)}</Text>;
     } else {
       // Active and in progess => counting down; should show a pause button
-      if (isActive && status === "In Progress...") {
+      if (activeTodo === todo.id && status === "In Progress...") {
         return (
           <Box display="flex" alignItems="center" justifyContent="space-around">
             <Text>{timeConvert(timeLeft)}</Text>
-            <Button onClick={pause} size="sm">
+            <Button onClick={toggleActive} size="sm">
               <GiPauseButton />
             </Button>
           </Box>
         );
-      } else if (!isActive && status === "In Progress...") {
+      } else if (activeTodo !== todo.id && status === "In Progress...") {
         // Not active but in progress => a paused todo
         return (
           <Box display="flex" alignItems="center" justifyContent="space-around">
             <Text>{timeConvert(timeLeft)}</Text>
-            <Button onClick={pause} size="sm">
+            <Button
+              onClick={toggleActive}
+              size="sm"
+              disabled={activeTodo && activeTodo !== todo.id}
+            >
               <BsPlayFill />
             </Button>
           </Box>
@@ -126,8 +153,8 @@ const Timer = ({
   return <Td>{returnStatus()}</Td>;
 };
 
-const TodoItem = ({ todo, todos, id }) => {
-  const [isActive, setIsActive] = React.useState(todo.active);
+const TodoItem = ({ todo, todos, id, setActiveTodo, activeTodo }) => {
+  // const [isActive, setIsActive] = React.useState(todos[activeTodo]);
   const [status, setStatus] = React.useState(todo.status);
 
   React.useEffect(() => {
@@ -154,10 +181,11 @@ const TodoItem = ({ todo, todos, id }) => {
         id={id}
         todo={todo}
         todos={todos}
-        isActive={isActive}
+        status={status}
+        activeTodo={activeTodo}
+        setActiveTodo={setActiveTodo}
         status={status}
         setStatus={setStatus}
-        setIsActive={setIsActive}
       />
     </Tr>
   );

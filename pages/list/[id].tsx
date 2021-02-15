@@ -1,15 +1,31 @@
 import React from "react";
 import { Box, Heading, Button, useDisclosure } from "@chakra-ui/react";
-import AddItem from "../components/AddItem";
-import List from "../components/List";
-// import { saveUser } from "../util/create";
+import AddItem from "../../components/AddItem";
+import List from "../../components/List";
+import { PrismaClient } from "@prisma/client";
 
-const Home = () => {
+export const getServerSideProps = async ({ params }) => {
+  const prisma = new PrismaClient();
+  console.log(params);
+  // const list = await prisma.list.findUnique({
+  //   where: {
+  //     id: params.id,
+  //   },
+  // });
+
+  return {
+    props: {
+      // list,
+    },
+  };
+};
+
+const TodoList = (props) => {
+  // console.log(props);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [todos, setTodos] = React.useState([]);
 
   React.useEffect(() => {
-    // localStorage.clear();
     if (localStorage.todos) setTodos(JSON.parse(localStorage.todos));
   }, []);
 
@@ -33,4 +49,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default TodoList;

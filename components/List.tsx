@@ -3,6 +3,8 @@ import { Box, Table, Thead, Tbody, Tfoot, Tr, Th } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 
 export default function List({ todos }) {
+  const [activeTodo, setActiveTodo] = React.useState(null);
+
   const totalDuration = () => {
     if (todos.length === 0) return null;
     const durations = todos.map((todo) => parseFloat(todo.duration));
@@ -35,7 +37,16 @@ export default function List({ todos }) {
           </Thead>
           <Tbody>
             {todos.map((todo, i) => {
-              return <TodoItem todos={todos} todo={todo} key={i} id={i} />;
+              return (
+                <TodoItem
+                  activeTodo={activeTodo}
+                  setActiveTodo={setActiveTodo}
+                  todos={todos}
+                  todo={todo}
+                  key={i}
+                  id={i}
+                />
+              );
             })}
           </Tbody>
           <Tfoot>
