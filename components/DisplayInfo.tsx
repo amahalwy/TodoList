@@ -27,7 +27,14 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({
   activeTodo,
   toggleActive,
 }) => {
-  if (!todo.duration) return null;
+  const startNullDuration = () => {};
+
+  if (!todo.duration)
+    return (
+      <Button onClick={start} disabled={activeTodo && activeTodo !== todo.id}>
+        Start?
+      </Button>
+    );
   if (status === "Not Started") {
     return (
       <Button onClick={start} disabled={activeTodo && activeTodo !== todo.id}>

@@ -9,8 +9,9 @@ import {
 } from "@chakra-ui/react";
 import * as chrono from "chrono-node";
 import { Form, Field } from "react-final-form";
+import { AddTodoProps } from "../typescript/interfaces";
 
-const AddTodo = ({ todos, setTodos }) => {
+const AddTodo: React.FC<AddTodoProps> = ({ todos, setTodos }) => {
   const required = (value) => (value ? undefined : "Required");
   const onSubmit = (values) => {
     values.status = "Not Started";

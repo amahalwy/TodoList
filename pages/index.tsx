@@ -7,8 +7,8 @@ const Home = () => {
   const [todos, setTodos] = React.useState([]);
 
   React.useEffect(() => {
-    // localStorage.clear();
-    if (localStorage.todos) setTodos(JSON.parse(localStorage.todos));
+    localStorage.clear();
+    // if (localStorage.todos) setTodos(JSON.parse(localStorage.todos));
   }, []);
 
   return (

@@ -13,7 +13,7 @@ const Timer: React.FC<TimerProps> = ({
   setActiveTodo,
 }) => {
   const [initialDuration, setInitialDuration] = React.useState<number | any>(
-    Number(todo.duration) * 60000
+    todo.duration ? Number(todo.duration) * 60000 : null
   );
 
   const [timeLeft, setTimeLeft] = React.useState<number | any>(
@@ -21,17 +21,21 @@ const Timer: React.FC<TimerProps> = ({
   );
 
   React.useEffect(() => {
+    let interval = null;
+
     todo.timeLeft = timeLeft;
     getAndSetStatus();
     localStorage.setItem("todos", JSON.stringify(todos));
 
-    let interval = null;
+    if (!initialDuration && activeTodo === todo.id) {
+      setStatus("In Progress...");
+    }
 
     if (activeTodo === todo.id && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft((timeLeft) => timeLeft - 1000);
       }, 1000);
-    } else if (activeTodo === todo.id && timeLeft <= 0) {
+    } else if (activeTodo === todo.id && timeLeft <= 0 && initialDuration) {
       setActiveTodo(null);
       getAndSetStatus();
       todo.active = false;
@@ -56,6 +60,11 @@ const Timer: React.FC<TimerProps> = ({
   };
 
   const getAndSetStatus = () => {
+    if (!todo.duration && timeLeft === 0) {
+      console.log("test");
+      setStatus("null");
+      todo.status = "null";
+    }
     if (timeLeft >= initialDuration) {
       setStatus("Not Started");
       todo.status = "Not Started";

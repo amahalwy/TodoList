@@ -3,6 +3,7 @@ import { Box, Table, Thead, Tbody, Tfoot, Tr, Th, Td } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 import AddTodo from "./AddTodo";
 import { ListProps } from "../typescript/interfaces";
+import TableFooter from "./TableFooter";
 
 const List: React.FC<ListProps> = ({ todos, setTodos }) => {
   const [activeTodo, setActiveTodo] = React.useState(null);
@@ -52,18 +53,11 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
               );
             })}
           </Tbody>
-
-          <Tfoot>
-            <Tr>
-              <Th>Total Tasks: {todos.length}</Th>
-              <Th>Total Duration: {totalDuration()} (mins)</Th>
-            </Tr>
-          </Tfoot>
         </Table>
       </Box>
-      <Box>
-        <AddTodo todos={todos} setTodos={setTodos} />
-      </Box>
+      {todos.length > 0 ? <TableFooter todos={todos} /> : null}
+
+      <AddTodo todos={todos} setTodos={setTodos} />
     </Box>
   );
 };
