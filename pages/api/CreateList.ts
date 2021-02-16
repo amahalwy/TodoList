@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 export default async (req) => {
   const prisma = new PrismaClient();
-  console.log(req);
+
   // const { owner, nominations } = req.body;
 
   // const id = uuid();

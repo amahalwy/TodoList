@@ -1,11 +1,9 @@
 import React from "react";
 import { Box, Heading, Button, useDisclosure } from "@chakra-ui/react";
-import AddItem from "../components/AddItem";
 import List from "../components/List";
 // import { saveUser } from "../util/create";
 
 const Home = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [todos, setTodos] = React.useState([]);
 
   React.useEffect(() => {
@@ -15,19 +13,12 @@ const Home = () => {
 
   return (
     <Box bg="#fff" h="100vh">
-      <Box w="60%" p="4% 0" m="0 auto">
+      <Box w="60%" p="4% 0" m="0 auto" maxH="600px">
         <Box display="flex" justifyContent="space-between">
           <Heading>To Do list - *date* </Heading>
-          <Button onClick={onOpen}>Create a task</Button>
-          <AddItem
-            todos={todos}
-            setTodos={setTodos}
-            isOpen={isOpen}
-            onClose={onClose}
-          />
         </Box>
 
-        <List todos={todos} />
+        <List todos={todos} setTodos={setTodos} />
       </Box>
     </Box>
   );
