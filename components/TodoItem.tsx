@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Tr, Td } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import { TodoItemProps } from "../typescript/interfaces";
 import Timer from "./Timer";
-import { CloseIcon } from "@chakra-ui/icons";
 
 const TodoItem: React.FC<TodoItemProps> = ({
   id,

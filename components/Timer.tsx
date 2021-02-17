@@ -1,8 +1,19 @@
 import React from "react";
-import { Td, Button, Box } from "@chakra-ui/react";
+import { Td, Box } from "@chakra-ui/react";
 import DisplayInfo from "./DisplayInfo";
 import { TimerProps } from "../typescript/interfaces";
-import { CloseIcon } from "@chakra-ui/icons";
+
+const generateTimeLeft = (todo) => {
+  if (todo.timeLeft === undefined) {
+    if (todo.duration) {
+      return Number(todo.duration) * 60000;
+    } else {
+      null;
+    }
+  } else {
+    return todo.timeLeft;
+  }
+};
 
 const Timer: React.FC<TimerProps> = ({
   todo,
@@ -17,7 +28,7 @@ const Timer: React.FC<TimerProps> = ({
   );
 
   const [timeLeft, setTimeLeft] = React.useState<number | any>(
-    todo.timeLeft === undefined ? Number(todo.duration) * 60000 : todo.timeLeft
+    generateTimeLeft(todo)
   );
 
   React.useEffect(() => {
@@ -29,6 +40,7 @@ const Timer: React.FC<TimerProps> = ({
 
     if (!initialDuration && activeTodo === todo.id) {
       setStatus("In Progress...");
+      todo.active = true;
     }
 
     if (activeTodo === todo.id && timeLeft > 0) {
@@ -50,6 +62,13 @@ const Timer: React.FC<TimerProps> = ({
     localStorage.setItem("todos", JSON.stringify(todos));
   };
 
+  const finishTodo = () => {
+    setActiveTodo(null);
+    setStatus("Completed");
+    todo.status = "Completed";
+    localStorage.setItem("todos", JSON.stringify(todos));
+  };
+
   const toggleActive = () => {
     activeTodo === null ? setActiveTodo(todo.id) : setActiveTodo(null);
     todos[todo.id].active
@@ -60,11 +79,6 @@ const Timer: React.FC<TimerProps> = ({
   };
 
   const getAndSetStatus = () => {
-    if (!todo.duration && timeLeft === 0) {
-      console.log("test");
-      setStatus("null");
-      todo.status = "null";
-    }
     if (timeLeft >= initialDuration) {
       setStatus("Not Started");
       todo.status = "Not Started";
@@ -85,10 +99,11 @@ const Timer: React.FC<TimerProps> = ({
       <Box d="flex">
         <DisplayInfo
           todo={todo}
-          start={start}
           status={status}
           timeLeft={timeLeft}
           activeTodo={activeTodo}
+          start={start}
+          finishTodo={finishTodo}
           toggleActive={toggleActive}
         />
       </Box>

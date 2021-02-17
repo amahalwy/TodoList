@@ -13,8 +13,7 @@ import { AddTodoProps } from "../typescript/interfaces";
 
 const AddTodo: React.FC<AddTodoProps> = ({ todos, setTodos }) => {
   const required = (value) => (value ? undefined : "Required");
-  const onSubmit = (values) => {
-    values.status = "Not Started";
+  const onSubmit = (values, form) => {
     values.active = false;
     const res: any = chrono.parseDate(values.description);
     const newD: any = new Date();
@@ -22,11 +21,13 @@ const AddTodo: React.FC<AddTodoProps> = ({ todos, setTodos }) => {
     const newTodos = todos.concat(values);
     setTodos(newTodos);
     localStorage.setItem("todos", JSON.stringify(newTodos));
+    setTimeout(form.reset);
   };
 
   return (
     <Box m="2% auto">
       <Form
+        initialValues={{ status: "Not Started" }}
         onSubmit={onSubmit}
         render={({ handleSubmit, form, pristine, values }) => (
           <form onSubmit={handleSubmit}>
@@ -51,14 +52,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ todos, setTodos }) => {
                   </FormControl>
                 )}
               />
-              <Button
-                ml="4%"
-                type="submit"
-                onClick={() => {
-                  onSubmit(values);
-                  form.reset();
-                }}
-              >
+              <Button ml="4%" type="submit" disabled={pristine}>
                 Create Todo
               </Button>
             </Box>

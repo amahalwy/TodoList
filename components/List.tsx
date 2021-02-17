@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Table, Thead, Tbody, Tfoot, Tr, Th, Td } from "@chakra-ui/react";
+import { Box, Button, Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 import AddTodo from "./AddTodo";
 import { ListProps } from "../typescript/interfaces";
@@ -8,19 +8,11 @@ import TableFooter from "./TableFooter";
 const List: React.FC<ListProps> = ({ todos, setTodos }) => {
   const [activeTodo, setActiveTodo] = React.useState(null);
 
-  const totalDuration = () => {
-    if (todos.length === 0) return null;
-    const durations = todos.map((todo) => Number(todo.duration));
-
-    const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    return durations.reduce(reducer).toFixed(2);
-  };
-
   return (
     <Box
       bg="eee"
       mt="2%"
-      shadow="2xl"
+      shadow="base"
       border="1px solid #eaeaea"
       borderRadius="10px"
     >
@@ -58,6 +50,7 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
       {todos.length > 0 ? <TableFooter todos={todos} /> : null}
 
       <AddTodo todos={todos} setTodos={setTodos} />
+      {/* <Button>Start All</Button> */}
     </Box>
   );
 };

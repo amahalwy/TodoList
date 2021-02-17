@@ -5,10 +5,9 @@ import { TableFooterProps } from "../typescript/interfaces";
 const TableFooter: React.FC<TableFooterProps> = ({ todos }) => {
   const totalDuration = () => {
     if (todos.length === 0) return null;
-    const durations = todos.map((todo) => Number(todo.duration));
-
-    const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    return durations.reduce(reducer).toFixed(2);
+    return todos
+      .reduce((total, todo) => Number(todo.duration) + total, 0)
+      .toFixed(2);
   };
   return (
     <Box d="flex" justifyContent="space-between" w="95%" m="0 auto">
@@ -30,7 +29,7 @@ const TableFooter: React.FC<TableFooterProps> = ({ todos }) => {
           {totalDuration()}
         </Text>
       </Box>
-      <Box d="flex">
+      {/* <Box d="flex">
         <Text d="inline" fontWeight="bold">
           Completed Todos:
         </Text>
@@ -38,7 +37,7 @@ const TableFooter: React.FC<TableFooterProps> = ({ todos }) => {
           {" "}
           {totalDuration()}
         </Text>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

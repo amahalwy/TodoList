@@ -18,6 +18,7 @@ export interface DisplayInfoProps {
   timeLeft: number;
   activeTodo: number;
   start: () => void;
+  finishTodo: (t) => void;
   toggleActive: (t) => void;
 }
 
