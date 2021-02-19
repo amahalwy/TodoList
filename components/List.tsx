@@ -33,6 +33,20 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
     }
   };
 
+  // const startAll = () => {
+  //   const ids = todos.map((todo, i) => i);
+  //   setActiveTodos(ids);
+  // };
+
+  const toggleAll = () => {
+    if (activeTodos.length > 0) {
+      setActiveTodos([]);
+    } else {
+      const ids = todos.map((todo, i) => i);
+      setActiveTodos(ids);
+    }
+  };
+
   return (
     <Box
       bg="eee"
@@ -73,14 +87,22 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
         </Table>
       </Box>
       {todos.length > 0 ? <TableFooter todos={todos} /> : null}
+      <Box d="flex" w="95%" m="1% auto" alignItems="center">
+        <Button onClick={() => toggleAll()}>
+          {activeTodos.length > 0 ? "Pause all" : "Start all"}
+        </Button>
+        <FormControl d="flex" justifyContent="flex-end">
+          <FormLabel htmlFor="group" mb="0" fontSize={14}>
+            Group Todos
+          </FormLabel>
 
-      <FormControl display="flex" w="95%" justifyContent="flex-end">
-        <FormLabel htmlFor="group" mb="0" fontSize={14}>
-          Group Todos
-        </FormLabel>
-
-        <Switch id="group" onChange={() => toggleGroupTodos(groupedTodos)} />
-      </FormControl>
+          <Switch
+            id="group"
+            onChange={() => toggleGroupTodos(groupedTodos)}
+            h="10px"
+          />
+        </FormControl>
+      </Box>
 
       {/* New component for grouped todos vs solo todos */}
 
