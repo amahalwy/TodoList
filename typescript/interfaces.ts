@@ -48,3 +48,10 @@ export interface AddTodoProps {
 export interface TableFooterProps {
   todos: Todo[];
 }
+
+export interface GroupedTodosProps {
+  todos: Todo[];
+  todoCount: number;
+  setTodos: (t) => void;
+  setTodoCount: (n) => void;
+}

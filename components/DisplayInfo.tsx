@@ -52,7 +52,6 @@ const DisplayInfo: React.FC<DisplayInfoProps> = ({
     )
       return null;
   } else {
-    console.log(todo, activeTodo, status);
     if (status === STATUSES.NOT_STARTED) {
       return (
         <Button onClick={start} disabled={activeTodo && activeTodo !== todo.id}>

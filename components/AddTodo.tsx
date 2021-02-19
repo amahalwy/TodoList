@@ -52,6 +52,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ todos, setTodos }) => {
                   </FormControl>
                 )}
               />
+
               <Button ml="4%" type="submit" disabled={pristine}>
                 Create Todo
               </Button>

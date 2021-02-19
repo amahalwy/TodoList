@@ -1,12 +1,37 @@
 import React from "react";
-import { Box, Button, Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  FormControl,
+  FormLabel,
+  Switch,
+} from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 import AddTodo from "./AddTodo";
 import { ListProps } from "../typescript/interfaces";
 import TableFooter from "./TableFooter";
+import GroupedTodos from "./GroupedTodos";
 
 const List: React.FC<ListProps> = ({ todos, setTodos }) => {
-  const [activeTodo, setActiveTodo] = React.useState(null);
+  const [activeTodo, setActiveTodo] = React.useState<number | null>(null);
+  // Use this for grouped tasks instead
+  // If groupedTodos === true, allow activeTodos instead
+  const [groupedTodos, setGroupedTodos] = React.useState<boolean>(false);
+  const [activeTodos, setActiveTodos] = React.useState<number[]>([]);
+  const [todoCount, setTodoCount] = React.useState<number>(1);
+
+  const toggleGroupTodos = (value) => {
+    if (value) {
+      setGroupedTodos(false);
+    } else {
+      setGroupedTodos(true);
+    }
+  };
 
   return (
     <Box
@@ -49,7 +74,27 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
       </Box>
       {todos.length > 0 ? <TableFooter todos={todos} /> : null}
 
-      <AddTodo todos={todos} setTodos={setTodos} />
+      <FormControl display="flex" w="95%" justifyContent="flex-end">
+        <FormLabel htmlFor="group" mb="0" fontSize={14}>
+          Group Todos
+        </FormLabel>
+
+        <Switch id="group" onChange={() => toggleGroupTodos(groupedTodos)} />
+      </FormControl>
+
+      {/* New component for grouped todos vs solo todos */}
+
+      {groupedTodos ? (
+        <GroupedTodos
+          todoCount={todoCount}
+          setTodoCount={setTodoCount}
+          todos={todos}
+          setTodos={setTodos}
+        />
+      ) : (
+        <AddTodo todos={todos} setTodos={setTodos} />
+      )}
+
       {/* <Button>Start All</Button> */}
     </Box>
   );
