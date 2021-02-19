@@ -16,7 +16,7 @@ export interface DisplayInfoProps {
   todo: Todo;
   status: string;
   timeLeft: number;
-  activeTodo: number;
+  activeTodos: number[];
   start: () => void;
   finishTodo: (t) => void;
   toggleActive: (t) => void;
@@ -26,18 +26,18 @@ export interface TodoItemProps {
   id: number;
   todo: Todo;
   todos: Todo[];
-  activeTodo: number;
+  activeTodos: number[];
   setTodos: (t) => void;
-  setActiveTodo: (t) => void;
+  setActiveTodos: (t) => void;
 }
 
 export interface TimerProps {
   todo: Todo;
   todos: Todo[];
   status: string;
-  activeTodo: number;
+  activeTodos: number[];
   setStatus: (s) => void;
-  setActiveTodo: (t) => void;
+  setActiveTodos: (t) => void;
 }
 
 export interface AddTodoProps {

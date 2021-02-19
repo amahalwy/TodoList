@@ -18,7 +18,7 @@ import TableFooter from "./TableFooter";
 import GroupedTodos from "./GroupedTodos";
 
 const List: React.FC<ListProps> = ({ todos, setTodos }) => {
-  const [activeTodo, setActiveTodo] = React.useState<number | null>(null);
+  // const [activeTodo, setActiveTodo] = React.useState<number | null>(null);
   // Use this for grouped tasks instead
   // If groupedTodos === true, allow activeTodos instead
   const [groupedTodos, setGroupedTodos] = React.useState<boolean>(false);
@@ -63,9 +63,9 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
                   key={i}
                   todo={todo}
                   todos={todos}
-                  activeTodo={activeTodo}
+                  activeTodos={activeTodos}
                   setTodos={setTodos}
-                  setActiveTodo={setActiveTodo}
+                  setActiveTodos={setActiveTodos}
                 />
               );
             })}

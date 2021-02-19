@@ -9,8 +9,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
   todo,
   todos,
   setTodos,
-  activeTodo,
-  setActiveTodo,
+  activeTodos,
+  setActiveTodos,
 }) => {
   const [status, setStatus] = React.useState(todo.status);
 
@@ -45,8 +45,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
         todos={todos}
         status={status}
         setStatus={setStatus}
-        activeTodo={activeTodo}
-        setActiveTodo={setActiveTodo}
+        activeTodos={activeTodos}
+        setActiveTodos={setActiveTodos}
       />
       <Td>
         <Button onClick={() => removeTodo()}>
