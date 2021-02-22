@@ -1,47 +1,10 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  Input,
-  FormControl,
-  InputGroup,
-  FormErrorMessage,
-} from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { Form, Field } from "react-final-form";
-import { AddIcon } from "@chakra-ui/icons";
 import { GroupedTodosProps, Todo } from "../typescript/interfaces";
 import * as chrono from "chrono-node";
 import { STATUSES } from "../generals/statuses";
-
-const RenderForms = ({ idx }) => {
-  const required = (value) => (value ? undefined : "Required");
-  const [desc, setDesc] = React.useState(`description${idx}`);
-
-  return (
-    <Box display="flex" ml="2%" w="96%" mb="2%">
-      <Field
-        name={desc}
-        validate={required}
-        render={({ input, meta }) => (
-          <FormControl isInvalid={meta.touched && meta.error}>
-            <InputGroup>
-              <Input
-                w="100%"
-                id={desc}
-                h="2.68rem"
-                placeholder="Add a Todo with duration"
-                {...input}
-              />
-            </InputGroup>
-            {meta.touched && meta.error && (
-              <FormErrorMessage>{meta.error}</FormErrorMessage>
-            )}
-          </FormControl>
-        )}
-      />
-    </Box>
-  );
-};
+import RenderFields from "./RenderFields";
 
 const GroupedTodos: React.FC<GroupedTodosProps> = ({
   todos,
@@ -50,20 +13,31 @@ const GroupedTodos: React.FC<GroupedTodosProps> = ({
   setTodoCount,
 }) => {
   const [inputLength, setInputLength] = React.useState([]);
+  const [groupId, setGroupId] = React.useState(1);
 
   const onSubmit = (values, form) => {
-    const vals = Object.values(values);
-    const objects = vals.map((description: string) => {
-      const res: any = chrono.parseDate(description);
+    const groupDuration: any = Object.values(values)[1];
+    const vals = Object.values(values).filter((value, idx) => idx > 0);
+
+    const objects = vals.map((description: string, id) => {
+      const res: any = chrono.parseDate(groupDuration);
       const newD: any = new Date();
-      const duration = res > 0 ? ((res - newD) / 60000).toFixed(2) : null;
+      const duration =
+        res > 0 && id === 0 ? ((res - newD) / 60000).toFixed(2) : null;
 
       let obj: Todo = {
+        id,
         description,
         active: false,
         duration,
-        status: STATUSES.NOT_STARTED,
+        status: values.status,
+        groupId,
+        groupMain: false,
       };
+
+      if (id === 0) {
+        obj.groupMain = true;
+      }
 
       return obj;
     });
@@ -71,39 +45,42 @@ const GroupedTodos: React.FC<GroupedTodosProps> = ({
     const newTodos = todos.concat(objects);
     setTodos(newTodos);
     localStorage.setItem("todos", JSON.stringify(newTodos));
+    setGroupId(groupId + 1);
     setTimeout(form.reset);
   };
 
   React.useEffect(() => {
-    // if (inputLength.length > 1) {
-    setInputLength([...inputLength, undefined]);
-    // } else {
-    //   setInputLength([...inputLength]);
-    // }
+    let newArr = new Array(todoCount);
+    newArr.fill(undefined);
+    setInputLength(newArr);
   }, [todoCount]);
 
   return (
     <Box m="2% auto">
       <Form
         onSubmit={onSubmit}
-        render={({ handleSubmit, form, pristine, values }) => (
+        initialValues={{ status: "Not Started" }}
+        render={({ handleSubmit, pristine }) => (
           <form onSubmit={handleSubmit}>
-            {/* <Box>
-              <p></p>
-              
-            </Box> */}
-            {inputLength.map((notNeeded, idx) => {
-              return (
-                <Box key={idx}>
-                  <RenderForms idx={idx} />
-                </Box>
-              );
-            })}
             <Box>
-              <Button ml="2%" onClick={() => setTodoCount(todoCount + 1)}>
-                <AddIcon />
+              {inputLength.map((notNeeded, idx) => {
+                return (
+                  <Box key={idx}>
+                    <RenderFields
+                      idx={idx}
+                      todoCount={todoCount}
+                      inputLength={inputLength}
+                      setTodoCount={setTodoCount}
+                      setInputLength={setInputLength}
+                    />
+                  </Box>
+                );
+              })}
+            </Box>
+            <Box ml="2%">
+              <Button type="submit" disabled={pristine}>
+                Submit
               </Button>
-              <Button type="submit">Submit</Button>
             </Box>
           </form>
         )}

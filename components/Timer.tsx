@@ -95,12 +95,14 @@ const Timer: React.FC<TimerProps> = ({
       <Box d="flex">
         <DisplayInfo
           todo={todo}
+          todos={todos}
           status={status}
           timeLeft={timeLeft}
           activeTodos={activeTodos}
           start={start}
           finishTodo={finishTodo}
           toggleActive={toggleActive}
+          setActiveTodos={setActiveTodos}
         />
       </Box>
     </Td>

@@ -10,11 +10,10 @@ import {
 import * as chrono from "chrono-node";
 import { Form, Field } from "react-final-form";
 import { AddTodoProps } from "../typescript/interfaces";
+import { required } from "../generals/functions";
 
 const AddTodo: React.FC<AddTodoProps> = ({ todos, setTodos }) => {
-  const required = (value) => (value ? undefined : "Required");
   const onSubmit = (values, form) => {
-    values.active = false;
     const res: any = chrono.parseDate(values.description);
     const newD: any = new Date();
     values.duration = res > 0 ? ((res - newD) / 60000).toFixed(2) : null;
@@ -27,7 +26,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ todos, setTodos }) => {
   return (
     <Box m="2% auto">
       <Form
-        initialValues={{ status: "Not Started" }}
+        initialValues={{ status: "Not Started", active: false, groupId: null }}
         onSubmit={onSubmit}
         render={({ handleSubmit, form, pristine, values }) => (
           <form onSubmit={handleSubmit}>
