@@ -1,8 +1,3 @@
-export interface ListProps {
-  todos: Todo[];
-  setTodos: (t) => void;
-}
-
 export interface Todo {
   id?: number;
   duration: string | number;
@@ -12,12 +7,18 @@ export interface Todo {
   description: string;
 }
 
+export interface ListProps {
+  todos: Todo[];
+  setTodos: (t) => void;
+}
+
 export interface DisplayInfoProps {
   todo: Todo;
   status: string;
   timeLeft: number;
   activeTodo: number;
   start: () => void;
+  finishTodo: (t) => void;
   toggleActive: (t) => void;
 }
 
@@ -37,4 +38,20 @@ export interface TimerProps {
   activeTodo: number;
   setStatus: (s) => void;
   setActiveTodo: (t) => void;
+}
+
+export interface AddTodoProps {
+  todos: Todo[];
+  setTodos: (t) => void;
+}
+
+export interface TableFooterProps {
+  todos: Todo[];
+}
+
+export interface GroupedTodosProps {
+  todos: Todo[];
+  todoCount: number;
+  setTodos: (t) => void;
+  setTodoCount: (n) => void;
 }

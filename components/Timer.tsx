@@ -1,8 +1,19 @@
 import React from "react";
-import { Td, Button, Box } from "@chakra-ui/react";
+import { Td, Box } from "@chakra-ui/react";
 import DisplayInfo from "./DisplayInfo";
 import { TimerProps } from "../typescript/interfaces";
-import { CloseIcon } from "@chakra-ui/icons";
+
+const generateTimeLeft = (todo) => {
+  if (todo.timeLeft === undefined) {
+    if (todo.duration) {
+      return Number(todo.duration) * 60000;
+    } else {
+      null;
+    }
+  } else {
+    return todo.timeLeft;
+  }
+};
 
 const Timer: React.FC<TimerProps> = ({
   todo,
@@ -13,25 +24,30 @@ const Timer: React.FC<TimerProps> = ({
   setActiveTodo,
 }) => {
   const [initialDuration, setInitialDuration] = React.useState<number | any>(
-    Number(todo.duration) * 60000
+    todo.duration ? Number(todo.duration) * 60000 : null
   );
 
   const [timeLeft, setTimeLeft] = React.useState<number | any>(
-    todo.timeLeft === undefined ? Number(todo.duration) * 60000 : todo.timeLeft
+    generateTimeLeft(todo)
   );
 
   React.useEffect(() => {
+    let interval = null;
+
     todo.timeLeft = timeLeft;
     getAndSetStatus();
     localStorage.setItem("todos", JSON.stringify(todos));
 
-    let interval = null;
+    if (!initialDuration && activeTodo === todo.id) {
+      setStatus("In Progress...");
+      todo.active = true;
+    }
 
     if (activeTodo === todo.id && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft((timeLeft) => timeLeft - 1000);
       }, 1000);
-    } else if (activeTodo === todo.id && timeLeft <= 0) {
+    } else if (activeTodo === todo.id && timeLeft <= 0 && initialDuration) {
       setActiveTodo(null);
       getAndSetStatus();
       todo.active = false;
@@ -43,6 +59,13 @@ const Timer: React.FC<TimerProps> = ({
   const start = () => {
     setActiveTodo(todo.id);
     todos[todo.id].active = true;
+    localStorage.setItem("todos", JSON.stringify(todos));
+  };
+
+  const finishTodo = () => {
+    setActiveTodo(null);
+    setStatus("Completed");
+    todo.status = "Completed";
     localStorage.setItem("todos", JSON.stringify(todos));
   };
 
@@ -76,10 +99,11 @@ const Timer: React.FC<TimerProps> = ({
       <Box d="flex">
         <DisplayInfo
           todo={todo}
-          start={start}
           status={status}
           timeLeft={timeLeft}
           activeTodo={activeTodo}
+          start={start}
+          finishTodo={finishTodo}
           toggleActive={toggleActive}
         />
       </Box>

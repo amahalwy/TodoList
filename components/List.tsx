@@ -1,25 +1,43 @@
 import React from "react";
-import { Box, Table, Thead, Tbody, Tfoot, Tr, Th, Td } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  FormControl,
+  FormLabel,
+  Switch,
+} from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 import AddTodo from "./AddTodo";
 import { ListProps } from "../typescript/interfaces";
+import TableFooter from "./TableFooter";
+import GroupedTodos from "./GroupedTodos";
 
 const List: React.FC<ListProps> = ({ todos, setTodos }) => {
-  const [activeTodo, setActiveTodo] = React.useState(null);
+  const [activeTodo, setActiveTodo] = React.useState<number | null>(null);
+  // Use this for grouped tasks instead
+  // If groupedTodos === true, allow activeTodos instead
+  const [groupedTodos, setGroupedTodos] = React.useState<boolean>(false);
+  const [activeTodos, setActiveTodos] = React.useState<number[]>([]);
+  const [todoCount, setTodoCount] = React.useState<number>(1);
 
-  const totalDuration = () => {
-    if (todos.length === 0) return null;
-    const durations = todos.map((todo) => Number(todo.duration));
-
-    const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    return durations.reduce(reducer).toFixed(2);
+  const toggleGroupTodos = (value) => {
+    if (value) {
+      setGroupedTodos(false);
+    } else {
+      setGroupedTodos(true);
+    }
   };
 
   return (
     <Box
       bg="eee"
       mt="2%"
-      shadow="2xl"
+      shadow="base"
       border="1px solid #eaeaea"
       borderRadius="10px"
     >
@@ -52,18 +70,32 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
               );
             })}
           </Tbody>
-
-          <Tfoot>
-            <Tr>
-              <Th>Total Tasks: {todos.length}</Th>
-              <Th>Total Duration: {totalDuration()} (mins)</Th>
-            </Tr>
-          </Tfoot>
         </Table>
       </Box>
-      <Box>
+      {todos.length > 0 ? <TableFooter todos={todos} /> : null}
+
+      <FormControl display="flex" w="95%" justifyContent="flex-end">
+        <FormLabel htmlFor="group" mb="0" fontSize={14}>
+          Group Todos
+        </FormLabel>
+
+        <Switch id="group" onChange={() => toggleGroupTodos(groupedTodos)} />
+      </FormControl>
+
+      {/* New component for grouped todos vs solo todos */}
+
+      {groupedTodos ? (
+        <GroupedTodos
+          todoCount={todoCount}
+          setTodoCount={setTodoCount}
+          todos={todos}
+          setTodos={setTodos}
+        />
+      ) : (
         <AddTodo todos={todos} setTodos={setTodos} />
-      </Box>
+      )}
+
+      {/* <Button>Start All</Button> */}
     </Box>
   );
 };
