@@ -5,6 +5,8 @@ export interface Todo {
   active: boolean;
   status: string;
   description: string;
+  groupId?: number;
+  groupMain?: boolean;
 }
 
 export interface ListProps {
@@ -14,30 +16,32 @@ export interface ListProps {
 
 export interface DisplayInfoProps {
   todo: Todo;
+  todos: Todo[];
   status: string;
   timeLeft: number;
-  activeTodo: number;
+  activeTodos: number[];
   start: () => void;
   finishTodo: (t) => void;
   toggleActive: (t) => void;
+  setActiveTodos: (t) => void;
 }
 
 export interface TodoItemProps {
   id: number;
   todo: Todo;
   todos: Todo[];
-  activeTodo: number;
+  activeTodos: number[];
   setTodos: (t) => void;
-  setActiveTodo: (t) => void;
+  setActiveTodos: (t) => void;
 }
 
 export interface TimerProps {
   todo: Todo;
   todos: Todo[];
   status: string;
-  activeTodo: number;
+  activeTodos: number[];
   setStatus: (s) => void;
-  setActiveTodo: (t) => void;
+  setActiveTodos: (t) => void;
 }
 
 export interface AddTodoProps {
@@ -54,4 +58,12 @@ export interface GroupedTodosProps {
   todoCount: number;
   setTodos: (t) => void;
   setTodoCount: (n) => void;
+}
+
+export interface RenderFieldsProps {
+  idx: number;
+  todoCount: number;
+  inputLength: any[];
+  setTodoCount: (t) => void;
+  setInputLength: (t) => void;
 }

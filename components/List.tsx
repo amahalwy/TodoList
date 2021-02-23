@@ -18,9 +18,6 @@ import TableFooter from "./TableFooter";
 import GroupedTodos from "./GroupedTodos";
 
 const List: React.FC<ListProps> = ({ todos, setTodos }) => {
-  const [activeTodo, setActiveTodo] = React.useState<number | null>(null);
-  // Use this for grouped tasks instead
-  // If groupedTodos === true, allow activeTodos instead
   const [groupedTodos, setGroupedTodos] = React.useState<boolean>(false);
   const [activeTodos, setActiveTodos] = React.useState<number[]>([]);
   const [todoCount, setTodoCount] = React.useState<number>(1);
@@ -30,6 +27,15 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
       setGroupedTodos(false);
     } else {
       setGroupedTodos(true);
+    }
+  };
+
+  const toggleAll = () => {
+    if (activeTodos.length > 0) {
+      setActiveTodos([]);
+    } else {
+      const ids = todos.map((todo, i) => i);
+      setActiveTodos(ids);
     }
   };
 
@@ -48,11 +54,18 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
               <Th w="40%" fontSize={16}>
                 Description
               </Th>
-              <Th fontSize={16}>Duration (mins)</Th>
-              <Th fontSize={16} w="17%">
+              <Th fontSize={16} w="15%">
+                Duration (mins)
+              </Th>
+              <Th fontSize={16} w="15%">
+                Group Id
+              </Th>
+              <Th fontSize={16} w="15%">
                 Status
               </Th>
-              <Th fontSize={16}>Time Left</Th>
+              <Th fontSize={16} w="15%">
+                Time Left
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -63,9 +76,9 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
                   key={i}
                   todo={todo}
                   todos={todos}
-                  activeTodo={activeTodo}
+                  activeTodos={activeTodos}
                   setTodos={setTodos}
-                  setActiveTodo={setActiveTodo}
+                  setActiveTodos={setActiveTodos}
                 />
               );
             })}
@@ -73,16 +86,24 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
         </Table>
       </Box>
       {todos.length > 0 ? <TableFooter todos={todos} /> : null}
+      <Box d="flex" w="96%" m="1% 0" alignItems="center">
+        {todos.length > 0 ? (
+          <Button ml="2%" onClick={() => toggleAll()}>
+            {activeTodos.length > 0 ? "Pause all" : "Start all"}
+          </Button>
+        ) : null}
+        <FormControl d="flex" justifyContent="flex-end">
+          <FormLabel htmlFor="group" mb="0" fontSize={14}>
+            Group Todos
+          </FormLabel>
 
-      <FormControl display="flex" w="95%" justifyContent="flex-end">
-        <FormLabel htmlFor="group" mb="0" fontSize={14}>
-          Group Todos
-        </FormLabel>
-
-        <Switch id="group" onChange={() => toggleGroupTodos(groupedTodos)} />
-      </FormControl>
-
-      {/* New component for grouped todos vs solo todos */}
+          <Switch
+            id="group"
+            onChange={() => toggleGroupTodos(groupedTodos)}
+            h="10px"
+          />
+        </FormControl>
+      </Box>
 
       {groupedTodos ? (
         <GroupedTodos
@@ -94,8 +115,6 @@ const List: React.FC<ListProps> = ({ todos, setTodos }) => {
       ) : (
         <AddTodo todos={todos} setTodos={setTodos} />
       )}
-
-      {/* <Button>Start All</Button> */}
     </Box>
   );
 };
